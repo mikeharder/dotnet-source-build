@@ -3,4 +3,12 @@
 #echo on
 set -x
 
-docker build -t aspnet-build-tools:source-build ../.. | tee docker-build.log
+sourceDir=../../../../buildtools
+
+cp .dockerignore $sourceDir
+cp Dockerfile $sourceDir
+
+docker build -t aspnet-build-tools:source-build -f $sourceDir/Dockerfile $sourceDir | tee docker-build.log
+
+rm $sourceDir/.dockerignore
+rm $sourceDir/Dockerfile
