@@ -1,13 +1,16 @@
 FROM dotnet-source-build:fedora-23-compiled
 
-ENV \
-    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
-    DOTNET_HOME=/source-build/Tools/dotnetcli \
-    KOREBUILD_DOTNET_VERSION=latest \
+# Set by dotnet/source-build/build.sh and dotnet/source-build/dir.props
+ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
+    NUGET_PACKAGES=/source-build/packages \
+    DOTNET_TOOL_DIR=/source-build/Tools/dotnetcli
+
+# Use existing CLI and runtime rather than installing them
+ENV KOREBUILD_DOTNET_VERSION=latest \
     KOREBUILD_SKIP_RUNTIME_INSTALL=true
 
 # Prevent install of NetFx reference assembies
-RUN mkdir -p ${DOTNET_HOME}/buildtools/netfx/4.6.1
+RUN mkdir -p ${DOTNET_TOOL_DIR}/buildtools/netfx/4.6.1
 
 WORKDIR /buildtools
 
@@ -15,6 +18,6 @@ COPY . .
 
 # Restore in separate layer to reduce incremental build times when
 # restore succeeds but compile fails
-RUN ./build.sh -v /t:Restore /p:Configuration=Release /p:ExcludeTests=true
+RUN ./build.sh -v -d ${DOTNET_TOOL_DIR} /t:Restore /p:Configuration=Release /p:ExcludeTests=true
 
-RUN ./build.sh -v /t:Package /p:Configuration=Release /p:ExcludeTests=true
+RUN ./build.sh -v -d ${DOTNET_TOOL_DIR} /t:Package /p:Configuration=Release /p:ExcludeTests=true
