@@ -1,6 +1,9 @@
 FROM dotnet-source-build:fedora-23
 
-RUN git clone --recursive https://github.com/dotnet/source-build && cd source-build && git checkout 9d4073e
+# Need to run "git submodule update --recursive --remote" after checkout?
+RUN git clone --recursive https://github.com/dotnet/source-build && \
+    cd source-build && \
+    git checkout dev/release/2.0.0
 
 WORKDIR /patches
 
