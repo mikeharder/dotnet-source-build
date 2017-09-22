@@ -5,9 +5,11 @@ ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
     NUGET_PACKAGES=/source-build/packages \
     DOTNET_TOOL_DIR=/source-build/Tools/dotnetcli
 
-# Use existing CLI and runtime rather than installing them
-ENV KOREBUILD_DOTNET_VERSION=latest \
-    KOREBUILD_SKIP_RUNTIME_INSTALL=true
+# Use existing runtime
+ENV KOREBUILD_SKIP_RUNTIME_INSTALL=true
+
+# Required for 2.1 branches to use existing SDK, but cannot be used with rel/2.0.0
+# ENV KOREBUILD_DOTNET_VERSION=latest
 
 # Prevent install of NetFx reference assembies
 RUN mkdir -p ${DOTNET_TOOL_DIR}/buildtools/netfx/4.6.1
