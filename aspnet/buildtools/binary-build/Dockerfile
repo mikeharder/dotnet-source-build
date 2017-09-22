@@ -1,4 +1,4 @@
-FROM microsoft/dotnet-nightly:2.1.0-preview1-runtime-deps-jessie
+FROM microsoft/dotnet:2.0.0-runtime-deps-jessie
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -6,9 +6,9 @@ RUN apt-get update \
         curl \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /buildtools
-
 ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE true
+
+WORKDIR /buildtools
 
 COPY . .
 
