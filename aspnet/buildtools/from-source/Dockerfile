@@ -1,7 +1,8 @@
 FROM dotnet-source-build:fedora-23-compiled
 
 # Set by dotnet/source-build/build.sh and dotnet/source-build/dir.props
-ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
+ENV DotNetBuildFromSource=true \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true \
     NUGET_PACKAGES=/source-build/packages \
     DOTNET_TOOL_DIR=/source-build/Tools/dotnetcli
 
@@ -20,6 +21,6 @@ COPY . .
 
 # Restore in separate layer to reduce incremental build times when
 # restore succeeds but compile fails
-RUN ./build.sh -v -d ${DOTNET_TOOL_DIR} /t:Restore /p:Configuration=Release /p:ExcludeTests=true /p:RestoreSources=${NUGET_PACKAGES}
+RUN ./build.sh -v -d ${DOTNET_TOOL_DIR} /t:Restore /p:Configuration=Release /p:RestoreSources=${NUGET_PACKAGES}
 
-RUN ./build.sh -v -d ${DOTNET_TOOL_DIR} /t:Package /p:Configuration=Release /p:ExcludeTests=true
+RUN ./build.sh -v -d ${DOTNET_TOOL_DIR} /t:Package /p:Configuration=Release
