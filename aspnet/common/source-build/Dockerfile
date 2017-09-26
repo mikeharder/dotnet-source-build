@@ -1,4 +1,4 @@
-FROM aspnet-from-source:buildtools
+FROM aspnet-source-build:BuildTools
 
 WORKDIR /common
 
